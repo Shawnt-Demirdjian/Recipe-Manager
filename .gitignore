@@ -1,0 +1,25 @@
+# Maven
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+.classpath
+
+# VS Code
+.vscode/
+.project
+.settings/
+
+# non-default Application properties
+**/application-*.properties
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Crash logs
+hs_err_pid*
