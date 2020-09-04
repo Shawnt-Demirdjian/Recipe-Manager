@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WebController {
 	@Value("${psql.url}")
-	private String URL;
+	private String url;
 	@Value("${psql.user}")
-	private String USER;
+	private String user;
 	@Value("${psql.password}")
-	private String PASSWORD;
+	private String password;
 
 	private Connection psqlConn;
 
@@ -40,24 +40,23 @@ public class WebController {
 	 */
 	@GetMapping("/getRecipe/{id}")
 	public Recipe getRecipe(@PathVariable(value = "id") String id, HttpServletResponse httpResponse) {
-		this.ConnectPSQL();
+		this.connectPSQL();
 		Recipe response = new Recipe();
 
 		String sqlStr = "SELECT * FROM recipes WHERE id = ?";
 
-		try {
-			PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			pstmt.setInt(1, Integer.parseInt(id));
-			ResultSet result = pstmt.executeQuery();
-			result.next();
-			response.setTitle(result.getString(1));
-			response.setIngredients((String[]) result.getArray(2).getArray());
-			response.setDescription(result.getString(3));
-			response.setSteps((String[]) result.getArray(4).getArray());
-			response.setId(result.getInt(5));
+			try (ResultSet result = pstmt.executeQuery();) {
+				result.next();
+				response.setTitle(result.getString(1));
+				response.setIngredients((String[]) result.getArray(2).getArray());
+				response.setDescription(result.getString(3));
+				response.setSteps((String[]) result.getArray(4).getArray());
+				response.setId(result.getInt(5));
 
-			System.out.println(response.toString());
-
+				System.out.println(response.toString());
+			}
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response = null;
@@ -77,12 +76,11 @@ public class WebController {
 	 */
 	@PostMapping("/createRecipe")
 	public void createRecipe(@RequestBody Recipe newRecipe, HttpServletResponse httpResponse) {
-		this.ConnectPSQL();
+		this.connectPSQL();
 
 		String sqlStr = "INSERT INTO recipes(title, ingredients, description, steps) VALUES(?,?,?,?)";
 
-		try {
-			PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			pstmt.setString(1, newRecipe.getTitle());
 			pstmt.setArray(2, this.psqlConn.createArrayOf("text", newRecipe.getIngredients()));
 			pstmt.setString(3, newRecipe.getDescription());
@@ -120,11 +118,11 @@ public class WebController {
 			return;
 		}
 
-		this.ConnectPSQL();
+		this.connectPSQL();
 
 		String sqlStr = "UPDATE recipes SET ";
 
-		ArrayList<String> updatedColumns = new ArrayList<String>();
+		ArrayList<String> updatedColumns = new ArrayList<>();
 		if (!newRecipe.getTitle().isEmpty()) {
 			updatedColumns.add("title");
 		}
@@ -155,9 +153,7 @@ public class WebController {
 		// Add WHERE clause
 		sqlStr += " WHERE id = ? ;";
 
-		try {
-			PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);
-
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			// Set all parameters
 			int i;
 			for (i = 0; i < updatedColumns.size(); i++) {
@@ -192,7 +188,7 @@ public class WebController {
 				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
@@ -211,12 +207,11 @@ public class WebController {
 	 */
 	@DeleteMapping("/deleteRecipe/{id}")
 	public void deleteRecipe(@PathVariable(value = "id") String id, HttpServletResponse httpResponse) {
-		this.ConnectPSQL();
+		this.connectPSQL();
 
 		String sqlStr = "DELETE FROM recipes WHERE id = ?";
 
-		try {
-			PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			pstmt.setInt(1, Integer.parseInt(id));
 			// Run delete
 			int result = pstmt.executeUpdate();
@@ -239,10 +234,10 @@ public class WebController {
 	 * 
 	 * @return boolean
 	 */
-	public boolean ConnectPSQL() {
+	public boolean connectPSQL() {
 		this.psqlConn = null;
 		try {
-			this.psqlConn = DriverManager.getConnection(URL, USER, PASSWORD);
+			this.psqlConn = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return false;
