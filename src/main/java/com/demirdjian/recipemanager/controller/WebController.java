@@ -120,7 +120,7 @@ public class WebController {
 
 		this.connectPSQL();
 
-		String sqlStr = "UPDATE recipes SET ";
+		StringBuilder sqlStr = new StringBuilder("UPDATE recipes SET ");
 
 		ArrayList<String> updatedColumns = new ArrayList<>();
 		if (!newRecipe.getTitle().isEmpty()) {
@@ -145,15 +145,17 @@ public class WebController {
 		// add comma to every statement except last
 		for (int i = 0; i < updatedColumns.size(); i++) {
 			if (i != updatedColumns.size() - 1) {
-				sqlStr += updatedColumns.get(i) + "  = ? ,";
+				sqlStr.append(updatedColumns.get(i));
+				sqlStr.append("  = ? ,");
 			} else {
-				sqlStr += updatedColumns.get(i) + "  = ? ";
+				sqlStr.append(updatedColumns.get(i));
+				sqlStr.append("  = ? ");
 			}
 		}
 		// Add WHERE clause
-		sqlStr += " WHERE id = ? ;";
+		sqlStr.append(" WHERE id = ? ;");
 
-		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr.toString());) {
 			// Set all parameters
 			int i;
 			for (i = 0; i < updatedColumns.size(); i++) {
@@ -174,7 +176,7 @@ public class WebController {
 						pstmt.setArray(i + 1, this.psqlConn.createArrayOf("text", newRecipe.getSteps()));
 						break;
 					default:
-						// This should be impossible?
+						throw new IllegalArgumentException("Update Recipe: Unsupported Column");
 				}
 			}
 			pstmt.setInt(i + 1, newRecipe.getId());
@@ -188,7 +190,7 @@ public class WebController {
 				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | IllegalArgumentException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
