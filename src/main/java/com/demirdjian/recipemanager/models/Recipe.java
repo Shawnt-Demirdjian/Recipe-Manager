@@ -66,8 +66,14 @@ public class Recipe {
 	}
 
 	public String toString() {
-		return this.title + "\n" + this.description + "\n" + Arrays.toString(this.ingredients) + "\n"
-				+ Arrays.toString(this.steps) + "\n" + this.id;
+		StringBuilder returnStr = new StringBuilder();
+		returnStr.append("Title:\t\t" + this.title + "\n");
+		returnStr.append("Description:\t" + this.description + "\n");
+		returnStr.append("Ingredients:\t" + Arrays.toString(this.ingredients) + "\n");
+		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
+		returnStr.append("ID:\t\t" + this.id + "\n");
+
+		return returnStr.toString();
 	}
 
 }

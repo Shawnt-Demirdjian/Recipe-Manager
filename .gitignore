@@ -23,3 +23,6 @@ target/
 
 # Crash logs
 hs_err_pid*
+
+# logs
+*.log

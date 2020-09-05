@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 public class WebController {
 	@Value("${psql.url}")
@@ -30,6 +33,8 @@ public class WebController {
 	private String password;
 
 	private Connection psqlConn;
+
+	private static final Logger rmLogger = LoggerFactory.getLogger(WebController.class);
 
 	/**
 	 * Returns the recipe associated with the provided ID.
@@ -55,12 +60,13 @@ public class WebController {
 				response.setSteps((String[]) result.getArray(4).getArray());
 				response.setId(result.getInt(5));
 
-				System.out.println(response.toString());
+				String responseStr = response.toString();
+				rmLogger.debug("Recipe Found: \n{}", responseStr);
 			}
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response = null;
-			e.printStackTrace();
+			rmLogger.error("SQLException at /getRecipe", e);
 		}
 
 		this.safeClose();
@@ -92,11 +98,12 @@ public class WebController {
 				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 
-			System.out.println(newRecipe.toString());
+			String newRecipeStr = newRecipe.toString();
+			rmLogger.debug("Recipe Created: \n{}", newRecipeStr);
 
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			e.printStackTrace();
+			rmLogger.error("SQLException at /createRecipe", e);
 		}
 
 		this.safeClose();
@@ -180,11 +187,10 @@ public class WebController {
 				}
 			}
 			pstmt.setInt(i + 1, newRecipe.getId());
-			System.out.println(pstmt.toString());
 
 			// Run update
 			int result = pstmt.executeUpdate();
-			if (result >= 0) {
+			if (result > 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -192,10 +198,11 @@ public class WebController {
 
 		} catch (SQLException | IllegalArgumentException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			e.printStackTrace();
+			rmLogger.error(e.getMessage(), e);
 		}
 
-		System.out.println(newRecipe.toString());
+		String newRecipeStr = newRecipe.toString();
+		rmLogger.debug("Recipe Updated: \n{}", newRecipeStr);
 
 		this.safeClose();
 	}
@@ -225,7 +232,7 @@ public class WebController {
 
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			e.printStackTrace();
+			rmLogger.error("SQLException at /deleteRecipe", e);
 		}
 
 		this.safeClose();
@@ -240,8 +247,9 @@ public class WebController {
 		this.psqlConn = null;
 		try {
 			this.psqlConn = DriverManager.getConnection(url, user, password);
+			rmLogger.debug("Connected to pSQL");
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			rmLogger.info(e.getMessage());
 			return false;
 		}
 		return true;
@@ -253,9 +261,9 @@ public class WebController {
 	public void safeClose() {
 		try {
 			this.psqlConn.close();
+			rmLogger.debug("Disconnected from pSQL");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			rmLogger.error("SQLException at safeClose", e);
 		}
 	}
 
