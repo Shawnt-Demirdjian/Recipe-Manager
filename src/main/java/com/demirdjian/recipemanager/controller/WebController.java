@@ -8,9 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
+import com.demirdjian.recipemanager.models.CreateRecipeBody;
+import com.demirdjian.recipemanager.models.UpdateRecipeBody;
 import com.demirdjian.recipemanager.models.Recipe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 public class WebController {
@@ -44,7 +47,7 @@ public class WebController {
 	 * @return 404/null, No recipe with provided ID found
 	 */
 	@GetMapping("/getRecipe/{id}")
-	public Recipe getRecipe(@PathVariable(value = "id") String id, HttpServletResponse httpResponse) {
+	public Recipe getRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		Recipe response = new Recipe();
 
@@ -81,7 +84,7 @@ public class WebController {
 	 * @return 400, Missing required values, etc.
 	 */
 	@PostMapping("/createRecipe")
-	public void createRecipe(@RequestBody Recipe newRecipe, HttpServletResponse httpResponse) {
+	public void createRecipe(@Valid @RequestBody CreateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
 		String sqlStr = "INSERT INTO recipes(title, ingredients, description, steps) VALUES(?,?,?,?)";
@@ -117,14 +120,7 @@ public class WebController {
 	 * @return 400, Missing ID or values
 	 */
 	@PatchMapping("/updateRecipe")
-	public void updateRecipe(@RequestBody Recipe newRecipe, HttpServletResponse httpResponse) {
-
-		// Fail if no ID was provided
-		if (newRecipe.getId() == -1) {
-			httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return;
-		}
-
+	public void updateRecipe(@Valid @RequestBody UpdateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
 		StringBuilder sqlStr = new StringBuilder("UPDATE recipes SET ");
@@ -215,7 +211,7 @@ public class WebController {
 	 * @return 404, No recipe with provided ID found
 	 */
 	@DeleteMapping("/deleteRecipe/{id}")
-	public void deleteRecipe(@PathVariable(value = "id") String id, HttpServletResponse httpResponse) {
+	public void deleteRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
 		String sqlStr = "DELETE FROM recipes WHERE id = ?";
