@@ -2,21 +2,22 @@ package com.demirdjian.recipemanager.models;
 
 import java.util.Arrays;
 
-import javax.validation.constraints.*;
-
 // TODO: Implement Class-Level constraints so that at minimum one field is not Empty
 public class UpdateRecipeBody {
-	@NotNull(message = "A valid ID is required.")
-	@Min(1)
+
 	private int id;
-
 	private String title;
-
 	private String[] ingredients;
-
 	private String description;
-
 	private String[] steps;
+
+	public UpdateRecipeBody() {
+		this.id = -1;
+		this.title = "";
+		this.ingredients = new String[0];
+		this.description = "";
+		this.steps = new String[0];
+	}
 
 	public String getTitle() {
 		return title;

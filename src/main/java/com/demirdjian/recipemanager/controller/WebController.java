@@ -46,7 +46,7 @@ public class WebController {
 	 * @return Recipe
 	 * @return 404/null, No recipe with provided ID found
 	 */
-	@GetMapping("/getRecipe/{id}")
+	@GetMapping("/recipes/{id}")
 	public Recipe getRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		Recipe response = new Recipe();
@@ -83,7 +83,7 @@ public class WebController {
 	 * @return 201, Created Successfully
 	 * @return 400, Missing required values, etc.
 	 */
-	@PostMapping("/createRecipe")
+	@PostMapping("/recipes")
 	public void createRecipe(@Valid @RequestBody CreateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
@@ -119,9 +119,13 @@ public class WebController {
 	 * @return 200, Successfully updated
 	 * @return 400, Missing ID or values
 	 */
-	@PatchMapping("/updateRecipe")
-	public void updateRecipe(@Valid @RequestBody UpdateRecipeBody newRecipe, HttpServletResponse httpResponse) {
+	@PatchMapping("/recipes/{id}")
+	public void updateRecipe(@PathVariable(value = "id") @Min(1) String id,
+			@Valid @RequestBody UpdateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		this.connectPSQL();
+
+		// set id from URL param
+		newRecipe.setId(Integer.parseInt(id));
 
 		StringBuilder sqlStr = new StringBuilder("UPDATE recipes SET ");
 
@@ -210,7 +214,7 @@ public class WebController {
 	 * @return 200, Successfully deleted
 	 * @return 404, No recipe with provided ID found
 	 */
-	@DeleteMapping("/deleteRecipe/{id}")
+	@DeleteMapping("/recipes/{id}")
 	public void deleteRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
@@ -223,11 +227,11 @@ public class WebController {
 			if (result > 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 
 		} catch (SQLException e) {
-			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			rmLogger.error("SQLException at /deleteRecipe", e);
 		}
 
