@@ -79,10 +79,10 @@ public class WebController {
 	}
 
 	/**
-	 * Returns the recipe associated with the provided ID.
+	 * Returns the recipes that have the query string in their title
 	 * 
 	 * @param queryString
-	 * @return Recipe[]
+	 * @return List<Recipe>
 	 * @return 404/null, No recipes found
 	 */
 	@GetMapping("/recipes")
