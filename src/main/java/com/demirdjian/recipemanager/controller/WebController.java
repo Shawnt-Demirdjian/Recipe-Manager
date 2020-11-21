@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -65,6 +67,52 @@ public class WebController {
 
 				String responseStr = response.toString();
 				rmLogger.debug("Recipe Found: \n{}", responseStr);
+			}
+		} catch (SQLException e) {
+			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response = null;
+			rmLogger.error("SQLException at /getRecipe", e);
+		}
+
+		this.safeClose();
+		return response;
+	}
+
+	/**
+	 * Returns the recipe associated with the provided ID.
+	 * 
+	 * @param queryString
+	 * @return Recipe[]
+	 * @return 404/null, No recipes found
+	 */
+	@GetMapping("/recipes")
+	public List<Recipe> getRecipes(@RequestParam("queryString") String queryString, HttpServletResponse httpResponse) {
+		this.connectPSQL();
+		ArrayList<Recipe> response = new ArrayList<>();
+
+		String sqlStr = "SELECT * FROM recipes WHERE title ILIKE CONCAT('%',?,'%')";
+
+		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
+			// TODO Sanitize queryString
+			pstmt.setString(1, queryString);
+			try (ResultSet result = pstmt.executeQuery();) {
+				while (result.next()) {
+					Recipe newRecipe = new Recipe();
+					newRecipe.setTitle(result.getString(1));
+					newRecipe.setIngredients((String[]) result.getArray(2).getArray());
+					newRecipe.setDescription(result.getString(3));
+					newRecipe.setSteps((String[]) result.getArray(4).getArray());
+					newRecipe.setId(result.getInt(5));
+
+					response.add(newRecipe);
+				}
+
+				if (response.isEmpty()) {
+					String responseStr = response.toString();
+					rmLogger.debug("Recipes Found: \n{}", responseStr);
+				} else {
+					rmLogger.debug("No Recipes Found");
+				}
 			}
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
