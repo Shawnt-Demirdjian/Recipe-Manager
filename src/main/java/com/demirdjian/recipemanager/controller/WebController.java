@@ -49,14 +49,14 @@ public class WebController {
 	 * @return 404/null, No recipe with provided ID found
 	 */
 	@GetMapping("/recipes/{id}")
-	public Recipe getRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
+	public Recipe getRecipe(@PathVariable(value = "id") @Min(1) int id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		Recipe response = new Recipe();
 
 		String sqlStr = "SELECT * FROM recipes WHERE id = ?";
 
 		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
-			pstmt.setInt(1, Integer.parseInt(id));
+			pstmt.setInt(1, id);
 			try (ResultSet result = pstmt.executeQuery();) {
 				result.next();
 				response.setTitle(result.getString(1));
@@ -241,7 +241,7 @@ public class WebController {
 			if (result > 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 
 		} catch (SQLException | IllegalArgumentException e) {
