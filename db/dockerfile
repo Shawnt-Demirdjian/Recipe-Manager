@@ -1,0 +1,5 @@
+FROM postgres
+
+## RECIPE MANAGER POSTGRES
+
+COPY ./recipe-manager.sql /docker-entrypoint-initdb.d

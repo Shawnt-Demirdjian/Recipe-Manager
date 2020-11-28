@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Recipe Manager</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+		integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row mt-5">
+			<!-- CREATE RECIPE -->
+			<form action="/api/recipes" method="POST" class="col" id="createRecipeForm" onsubmit="return false;">
+				<h2>Create Recipe</h2>
+				<div class="form-group">
+					<label for="createRecipeTitleInput">Title</label>
+					<input type="text" class="form-control" name="title" id="createRecipeTitleInput"
+						placeholder="Grilled Cheese">
+				</div>
+				<div class="form-group">
+					<label for="createRecipeDescriptionInput">Description</label>
+					<textarea class="form-control" name="description" id="createRecipeDescriptionInput"
+						placeholder="A yummy sandwich of bread and cheese."></textarea>
+				</div>
+				<div class="form-group">
+					<label for="createRecipeStepsInput">Steps</label>
+					<textarea class="form-control" name="steps" id="createRecipeStepsInput"
+						placeholder="Get bread.&#10;Get Cheese.&#10;Cook them." aria-describedby="createRecipeStepsHelp"
+						rows="3"></textarea>
+					<small id="createRecipeStepsHelp" class="form-text">Input each step on a new line.</small>
+				</div>
+				<div class="form-group">
+					<label for="createRecipeIngredientsInput">Ingredients</label>
+					<textarea class="form-control" name="ingredients" id="createRecipeIngredientsInput"
+						placeholder="Two slices of bread.&#10;Two slices of cheese.&#10;2 tbls of butter."
+						aria-describedby="createRecipeIngredientsHelp" rows="3"></textarea>
+					<small id="createRecipeIngredientsHelp" class="form-text">Input each ingredient on a new
+						line.</small>
+				</div>
+				<button id="createRecipeSubmit" type="submit" class="btn btn-primary">Submit</button>
+			</form>
+
+			<!-- UPDATE RECIPE -->
+			<form action="/api/recipes" method="PATCH" class="col" id="updateRecipeForm" onsubmit="return false;">
+				<h2>Update Recipe</h2>
+				<div class="form-group">
+					<label for="updateRecipeTitleInput">Title</label>
+					<input type="text" class="form-control" name="title" id="updateRecipeTitleInput"
+						placeholder="Grilled Cheese">
+				</div>
+				<div class="form-group">
+					<label for="updateRecipeDescriptionInput">Description</label>
+					<textarea class="form-control" name="description" id="updateRecipeDescriptionInput"
+						placeholder="A yummy sandwich of bread and cheese."></textarea>
+				</div>
+				<div class="form-group">
+					<label for="updateRecipeStepsInput">Steps</label>
+					<textarea class="form-control" name="steps" id="updateRecipeStepsInput"
+						placeholder="Get bread.&#10;Get Cheese.&#10;Cook them." aria-describedby="updateRecipeStepsHelp"
+						rows="3"></textarea>
+					<small id="updateRecipeStepsHelp" class="form-text">Input each step on a new line.</small>
+				</div>
+				<div class="form-group">
+					<label for="updateRecipeIngredientsInput">Ingredients</label>
+					<textarea class="form-control" name="ingredients" id="updateRecipeIngredientsInput"
+						placeholder="Two slices of bread.&#10;Two slices of cheese.&#10;2 tbls of butter."
+						aria-describedby="updateRecipeIngredientsHelp" rows="3"></textarea>
+					<small id="updateRecipeIngredientsHelp" class="form-text">Input each ingredient on a new
+						line.</small>
+				</div>
+				<div class="form-group">
+					<label for="updateRecipeIdInput">ID</label>
+					<input type="number" class="form-control" name="id" id="updateRecipeIdInput" placeholder="0">
+				</div>
+				<button id="updateRecipeSubmit" type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+
+		<div class="row mt-5">
+			<!-- GET RECIPE -->
+			<form action="/api/recipes" method="GET" class="col" id="getRecipeForm" onsubmit="return false;">
+				<h2>Get Recipe</h2>
+				<div class="form-group">
+					<label for="getRecipeIdInput">ID</label>
+					<input type="number" class="form-control" name="id" id="getRecipeIdInput" placeholder="0">
+				</div>
+				<button id="getRecipeSubmit" type="submit" class="btn btn-primary">Submit</button>
+			</form>
+
+			<!-- DELETE RECIPE -->
+			<form action="/api/recipes" method="DELETE" class="col" id="deleteRecipeForm" onsubmit="return false;">
+				<h2>Delete Recipe</h2>
+				<div class="form-group">
+					<label for="deleteRecipeIdInput">ID</label>
+					<input type="number" class="form-control" name="id" id="deleteRecipeIdInput" placeholder="0">
+				</div>
+				<button id="deleteRecipeSubmit" type="submit" class="btn btn-primary">Submit</button>
+			</form>
+
+			<!-- SEARCH RECIPE -->
+			<form action="/api/recipes" method="GET" class="col" id="searchRecipeForm" onsubmit="return false;">
+				<h2>Search Recipe</h2>
+				<div class="form-group">
+					<label for="searchRecipeTitleInput">Title</label>
+					<input type="text" class="form-control" name="title" id="searchRecipeTitleInput"
+						placeholder="cheese">
+				</div>
+				<button id="searchRecipeSubmit" type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+
+	</div>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+		crossorigin="anonymous"></script>
+	<script src="scripts/index.js"></script>
+</body>
+
+</html>

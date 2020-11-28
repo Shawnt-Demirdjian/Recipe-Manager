@@ -1,0 +1,8 @@
+FROM adoptopenjdk:14-jre
+
+## RECIPE MANAGER SPRINGBOOT APP
+WORKDIR /docker_workdir
+COPY ./target/recipe-manager-0.0.1-SNAPSHOT.jar /docker_workdir
+
+# Run RECIPE MANAGER
+CMD ["java", "-jar", "/docker_workdir/recipe-manager-0.0.1-SNAPSHOT.jar", "com.demirdjian.recipemanager"]

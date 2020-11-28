@@ -1,0 +1,8 @@
+FROM nginx
+
+## RECIPE MANAGER NGINX WEB SERVER
+COPY ./client /usr/share/nginx/html
+COPY ./recipe-manager-site.conf /etc/nginx/conf.d/default.conf
+
+# Run NGINX
+CMD ["nginx", "-g", "daemon off;"]

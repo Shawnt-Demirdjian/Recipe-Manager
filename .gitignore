@@ -12,6 +12,9 @@ target/
 # non-default Application properties
 **/application-*.properties
 
+# env file
+.env
+
 # Package Files #
 *.jar
 *.war
