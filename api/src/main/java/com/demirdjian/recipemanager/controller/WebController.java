@@ -11,25 +11,28 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.demirdjian.recipemanager.models.CreateRecipeBody;
-import com.demirdjian.recipemanager.models.UpdateRecipeBody;
 import com.demirdjian.recipemanager.models.Recipe;
+import com.demirdjian.recipemanager.models.UpdateRecipeBody;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/api")
 public class WebController {
@@ -52,7 +55,7 @@ public class WebController {
 	 * @return 404/null, No recipe with provided ID found
 	 */
 	@GetMapping("/recipes/{id}")
-	public Recipe getRecipe(@PathVariable(value = "id") @Min(1) int id, HttpServletResponse httpResponse) {
+	public Recipe getRecipe(@PathVariable("id") @NotNull @Min(1) int id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		Recipe response = new Recipe();
 
@@ -61,18 +64,23 @@ public class WebController {
 		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			pstmt.setInt(1, id);
 			try (ResultSet result = pstmt.executeQuery();) {
-				result.next();
-				response.setTitle(result.getString(1));
-				response.setIngredients((String[]) result.getArray(2).getArray());
-				response.setDescription(result.getString(3));
-				response.setSteps((String[]) result.getArray(4).getArray());
-				response.setId(result.getInt(5));
+				if (result.next()) {
+					response.setTitle(result.getString(1));
+					response.setIngredients((String[]) result.getArray(2).getArray());
+					response.setDescription(result.getString(3));
+					response.setSteps((String[]) result.getArray(4).getArray());
+					response.setId(result.getInt(5));
 
-				String responseStr = response.toString();
-				rmLogger.debug("Recipe Found: \n{}", responseStr);
+					String responseStr = response.toString();
+					rmLogger.debug("Recipe Found: \n{}", responseStr);
+				} else {
+					httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					response = null;
+					rmLogger.debug("No Recipe Found.");
+				}
 			}
 		} catch (SQLException e) {
-			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response = null;
 			rmLogger.error("SQLException at /getRecipe", e);
 		}
@@ -82,14 +90,14 @@ public class WebController {
 	}
 
 	/**
-	 * Returns the recipes that have the query string in their title
+	 * Returns the recipes that have the query string in their title or description
 	 * 
 	 * @param queryString
 	 * @return List<Recipe>
 	 * @return 404/null, No recipes found
 	 */
 	@GetMapping("/recipes")
-	public List<Recipe> getRecipes(@RequestParam("queryString") @NotEmpty String queryString,
+	public List<Recipe> getRecipes(@RequestParam("queryString") @NotBlank String queryString,
 			HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		ArrayList<Recipe> response = new ArrayList<>();
@@ -113,15 +121,15 @@ public class WebController {
 					response.add(newRecipe);
 				}
 
-				if (response.isEmpty()) {
+				if (!response.isEmpty()) {
 					String responseStr = response.toString();
 					rmLogger.debug("Recipes Found: \n{}", responseStr);
 				} else {
-					rmLogger.debug("No Recipes Found");
+					rmLogger.debug("No Recipes Found.");
 				}
 			}
 		} catch (SQLException e) {
-			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response = null;
 			rmLogger.error("SQLException at /getRecipe", e);
 		}
@@ -151,12 +159,11 @@ public class WebController {
 			int result = pstmt.executeUpdate();
 			if (result >= 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_CREATED);
+				String newRecipeStr = newRecipe.toString();
+				rmLogger.debug("Recipe Created: \n{}", newRecipeStr);
 			} else {
 				httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
-
-			String newRecipeStr = newRecipe.toString();
-			rmLogger.debug("Recipe Created: \n{}", newRecipeStr);
 
 		} catch (SQLException e) {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -174,7 +181,7 @@ public class WebController {
 	 * @return 400, Missing ID or values
 	 */
 	@PatchMapping("/recipes/{id}")
-	public void updateRecipe(@PathVariable(value = "id") @Min(1) String id,
+	public void updateRecipe(@PathVariable("id") @NotNull @Min(1) String id,
 			@Valid @RequestBody UpdateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
@@ -246,6 +253,8 @@ public class WebController {
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_OK);
+				String newRecipeStr = newRecipe.toString();
+				rmLogger.debug("Recipe Updated: \n{}", newRecipeStr);
 			} else {
 				httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
@@ -254,9 +263,6 @@ public class WebController {
 			httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			rmLogger.error(e.getMessage(), e);
 		}
-
-		String newRecipeStr = newRecipe.toString();
-		rmLogger.debug("Recipe Updated: \n{}", newRecipeStr);
 
 		this.safeClose();
 	}
@@ -269,7 +275,7 @@ public class WebController {
 	 * @return 404, No recipe with provided ID found
 	 */
 	@DeleteMapping("/recipes/{id}")
-	public void deleteRecipe(@PathVariable(value = "id") @Min(1) String id, HttpServletResponse httpResponse) {
+	public void deleteRecipe(@PathVariable("id") @NotNull @Min(1) String id, HttpServletResponse httpResponse) {
 		this.connectPSQL();
 
 		String sqlStr = "DELETE FROM recipes WHERE id = ?";
@@ -280,6 +286,7 @@ public class WebController {
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
 				httpResponse.setStatus(HttpServletResponse.SC_OK);
+				rmLogger.debug("Recipe Deleted with ID: {}", id);
 			} else {
 				httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
