@@ -26,7 +26,7 @@ CREATE TABLE public.recipes
     id smallint NOT NULL DEFAULT nextval('recipes_id_seq'::regclass),
     document_vectors tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, ((COALESCE(title, ''::text) || ' '::text) || COALESCE(description, ''::text)))) STORED,
     CONSTRAINT recipes_pkey PRIMARY KEY (id)
-    )
+    );
 
 CREATE INDEX idx_doc_vec
     ON public.recipes USING gin
