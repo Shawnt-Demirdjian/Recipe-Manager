@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 import com.demirdjian.recipemanager.models.CreateRecipeBody;
 import com.demirdjian.recipemanager.models.UpdateRecipeBody;
@@ -88,11 +89,12 @@ public class WebController {
 	 * @return 404/null, No recipes found
 	 */
 	@GetMapping("/recipes")
-	public List<Recipe> getRecipes(@RequestParam("queryString") String queryString, HttpServletResponse httpResponse) {
+	public List<Recipe> getRecipes(@RequestParam("queryString") @NotEmpty String queryString,
+			HttpServletResponse httpResponse) {
 		this.connectPSQL();
 		ArrayList<Recipe> response = new ArrayList<>();
 
-		String sqlStr = "SELECT * FROM recipes WHERE title ILIKE CONCAT('%',?,'%')";
+		String sqlStr = "SELECT * FROM recipes WHERE document_vectors @@ to_tsquery(?)";
 
 		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
 			// TODO Sanitize queryString
