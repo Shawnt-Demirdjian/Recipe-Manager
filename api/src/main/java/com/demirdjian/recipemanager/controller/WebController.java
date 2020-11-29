@@ -94,10 +94,12 @@ public class WebController {
 		this.connectPSQL();
 		ArrayList<Recipe> response = new ArrayList<>();
 
+		// TODO Sanitize queryString
+		queryString = queryString.replaceAll("\\s+", " & ");
+
 		String sqlStr = "SELECT * FROM recipes WHERE document_vectors @@ to_tsquery(?)";
 
 		try (PreparedStatement pstmt = this.psqlConn.prepareStatement(sqlStr);) {
-			// TODO Sanitize queryString
 			pstmt.setString(1, queryString);
 			try (ResultSet result = pstmt.executeQuery();) {
 				while (result.next()) {
