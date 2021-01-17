@@ -1,5 +1,5 @@
-FROM postgres
+FROM mongo
 
-## RECIPE MANAGER POSTGRES
+## RECIPE MANAGER MONGODB
 
-COPY ./recipe-manager.sql /docker-entrypoint-initdb.d
+COPY ./recipe-manager.js /docker-entrypoint-initdb.d

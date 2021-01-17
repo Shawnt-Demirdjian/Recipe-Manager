@@ -7,17 +7,9 @@ public class UpdateRecipeBody {
 
 	private int id;
 	private String title;
-	private String[] ingredients;
+	private Ingredient[] ingredients;
 	private String description;
 	private String[] steps;
-
-	public UpdateRecipeBody() {
-		this.id = -1;
-		this.title = "";
-		this.ingredients = new String[0];
-		this.description = "";
-		this.steps = new String[0];
-	}
 
 	public String getTitle() {
 		return title;
@@ -27,11 +19,11 @@ public class UpdateRecipeBody {
 		this.title = title;
 	}
 
-	public String[] getIngredients() {
+	public Ingredient[] getIngredients() {
 		return ingredients;
 	}
 
-	public void setIngredients(String[] ingredients) {
+	public void setIngredients(Ingredient[] ingredients) {
 		this.ingredients = ingredients;
 	}
 

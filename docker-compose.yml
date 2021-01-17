@@ -9,13 +9,13 @@ services:
   db:
     build: "./db"
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes: 
-      - database-data:/var/lib/postgresql/data
-    environment: 
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_NAME}
+      - database-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
   web:
     build: "./web"
     ports: 

@@ -2,22 +2,28 @@ package com.demirdjian.recipemanager.models;
 
 import java.util.Arrays;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "recipes")
 public class Recipe {
-	private int id;
+
+	@Id
+	private String id;
+
+	@TextIndexed
 	private String title;
-	private String[] ingredients;
+	@TextIndexed
 	private String description;
+
+	private Ingredient[] ingredients;
 	private String[] steps;
 
 	public Recipe() {
-		this.id = -1;
-		this.title = "";
-		this.ingredients = new String[0];
-		this.description = "";
-		this.steps = new String[0];
 	}
 
-	public Recipe(int id, String title, String[] ingredients, String description, String[] steps) {
+	public Recipe(String id, String title, Ingredient[] ingredients, String description, String[] steps) {
 		this.id = id;
 		this.title = title;
 		this.ingredients = ingredients;
@@ -33,11 +39,11 @@ public class Recipe {
 		this.title = title;
 	}
 
-	public String[] getIngredients() {
+	public Ingredient[] getIngredients() {
 		return ingredients;
 	}
 
-	public void setIngredients(String[] ingredients) {
+	public void setIngredients(Ingredient[] ingredients) {
 		this.ingredients = ingredients;
 	}
 
@@ -57,11 +63,11 @@ public class Recipe {
 		this.steps = steps;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

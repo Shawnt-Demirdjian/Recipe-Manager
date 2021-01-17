@@ -2,14 +2,15 @@ package com.demirdjian.recipemanager.models;
 
 import java.util.Arrays;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 public class CreateRecipeBody {
 	@NotBlank(message = "Title may not be empty.")
 	private String title;
 
 	@NotEmpty(message = "Ingredients may not be empty.")
-	private String[] ingredients;
+	private Ingredient[] ingredients;
 
 	@NotBlank(message = "Description may not be empty.")
 	private String description;
@@ -25,11 +26,11 @@ public class CreateRecipeBody {
 		this.title = title;
 	}
 
-	public String[] getIngredients() {
+	public Ingredient[] getIngredients() {
 		return ingredients;
 	}
 
-	public void setIngredients(String[] ingredients) {
+	public void setIngredients(Ingredient[] ingredients) {
 		this.ingredients = ingredients;
 	}
 
