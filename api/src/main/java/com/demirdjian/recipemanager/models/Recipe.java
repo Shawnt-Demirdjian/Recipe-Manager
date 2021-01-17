@@ -16,8 +16,9 @@ public class Recipe {
 	private String title;
 	@TextIndexed
 	private String description;
-
+	@TextIndexed
 	private Ingredient[] ingredients;
+
 	private String[] steps;
 
 	/**
