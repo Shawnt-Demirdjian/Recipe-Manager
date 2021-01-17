@@ -20,9 +20,21 @@ public class Recipe {
 	private Ingredient[] ingredients;
 	private String[] steps;
 
+	/**
+	 * Empty Constructor.
+	 */
 	public Recipe() {
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 * @param title
+	 * @param ingredients
+	 * @param description
+	 * @param steps
+	 */
 	public Recipe(String id, String title, Ingredient[] ingredients, String description, String[] steps) {
 		this.id = id;
 		this.title = title;
@@ -71,6 +83,11 @@ public class Recipe {
 		this.id = id;
 	}
 
+	/**
+	 * Custom toString for debug printing.
+	 * 
+	 * @return String
+	 */
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
 		returnStr.append("Title:\t\t" + this.title + "\n");

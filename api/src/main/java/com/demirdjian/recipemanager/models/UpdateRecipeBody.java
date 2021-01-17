@@ -51,6 +51,11 @@ public class UpdateRecipeBody {
 		this.id = id;
 	}
 
+	/**
+	 * Custom toString for debug printing.
+	 * 
+	 * @return String
+	 */
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
 		returnStr.append("Title:\t\t" + this.title + "\n");
@@ -60,5 +65,4 @@ public class UpdateRecipeBody {
 
 		return returnStr.toString();
 	}
-
 }

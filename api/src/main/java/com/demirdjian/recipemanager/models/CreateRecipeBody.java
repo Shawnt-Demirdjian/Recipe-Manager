@@ -50,6 +50,11 @@ public class CreateRecipeBody {
 		this.steps = steps;
 	}
 
+	/**
+	 * Custom toString for debug printing.
+	 * 
+	 * @return String
+	 */
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
 		returnStr.append("Title:\t\t" + this.title + "\n");
@@ -59,5 +64,4 @@ public class CreateRecipeBody {
 
 		return returnStr.toString();
 	}
-
 }
