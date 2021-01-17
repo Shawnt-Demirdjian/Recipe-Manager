@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.TextQuery;
 public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     @Autowired
-    MongoTemplate template;
+    private MongoTemplate template;
 
     @Override
     public List<Recipe> searchByTitleAndDescription(String queryText) {

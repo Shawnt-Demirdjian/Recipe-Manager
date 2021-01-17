@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RecipeManagerApplication {
 
 	/**
+	 * Run the Spring Boot Application.
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {

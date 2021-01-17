@@ -39,6 +39,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, headers, status);
     }
 
+    /**
+     * Defines the handler for the Failed Constraint exceptions.
+     * 
+     * @param response
+     * @throws IOException
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public void constraintViolationException(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value());
