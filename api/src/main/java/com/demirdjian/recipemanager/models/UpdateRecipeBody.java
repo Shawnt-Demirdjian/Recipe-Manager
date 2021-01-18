@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 import com.demirdjian.recipemanager.validator.CategoryConstraint;
 import com.demirdjian.recipemanager.validator.CookingMethodConstraint;
+import com.demirdjian.recipemanager.validator.UpdateRecipeConstraint;
 
+@UpdateRecipeConstraint
 public class UpdateRecipeBody {
 
 	private int id;
