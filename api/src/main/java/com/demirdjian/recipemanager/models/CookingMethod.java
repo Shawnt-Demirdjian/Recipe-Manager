@@ -3,7 +3,7 @@ package com.demirdjian.recipemanager.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum CookingMethod {
-	STOVE, OVEN, BBQ, FRYER, NONE;
+	STOVE, OVEN, BBQ, FRYER, NONE, INVALID;
 
 	/**
 	 * Convert String to CookingMethod.
@@ -17,7 +17,7 @@ public enum CookingMethod {
 		try {
 			response = CookingMethod.valueOf(value.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			return null;
+			return CookingMethod.INVALID;
 		}
 		return response;
 	}

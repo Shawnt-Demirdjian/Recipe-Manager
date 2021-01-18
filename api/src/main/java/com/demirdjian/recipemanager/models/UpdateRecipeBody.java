@@ -2,7 +2,9 @@ package com.demirdjian.recipemanager.models;
 
 import java.util.Arrays;
 
-// TODO: Implement Class-Level constraints so that at minimum one field is not Empty
+import com.demirdjian.recipemanager.validator.CategoryConstraint;
+import com.demirdjian.recipemanager.validator.CookingMethodConstraint;
+
 public class UpdateRecipeBody {
 
 	private int id;
@@ -10,7 +12,10 @@ public class UpdateRecipeBody {
 	private Ingredient[] ingredients;
 	private String description;
 	private String[] steps;
+
+	@CategoryConstraint
 	private Category category;
+	@CookingMethodConstraint
 	private CookingMethod cookingMethod;
 
 	public String getTitle() {

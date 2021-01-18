@@ -6,6 +6,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.demirdjian.recipemanager.validator.CategoryConstraint;
+import com.demirdjian.recipemanager.validator.CookingMethodConstraint;
+
 public class CreateRecipeBody {
 	@NotBlank(message = "Title may not be empty.")
 	private String title;
@@ -20,9 +23,11 @@ public class CreateRecipeBody {
 	private String[] steps;
 
 	@NotNull(message = "Category may not be empty.")
+	@CategoryConstraint
 	private Category category;
 
 	@NotNull(message = "Cooking Method may not be empty.")
+	@CookingMethodConstraint
 	private CookingMethod cookingMethod;
 
 	public String getTitle() {
