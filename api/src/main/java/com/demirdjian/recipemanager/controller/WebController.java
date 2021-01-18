@@ -8,9 +8,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.demirdjian.recipemanager.db.RecipeRepository;
+import com.demirdjian.recipemanager.models.Category;
+import com.demirdjian.recipemanager.models.CookingMethod;
 import com.demirdjian.recipemanager.models.CreateRecipeBody;
 import com.demirdjian.recipemanager.models.Recipe;
 import com.demirdjian.recipemanager.models.UpdateRecipeBody;
+import com.demirdjian.recipemanager.validator.CategoryConstraint;
+import com.demirdjian.recipemanager.validator.CookingMethodConstraint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +65,16 @@ public class WebController {
 	 *
 	 * @param queryString
 	 * @param httpResponse
+	 * @param category
+	 * @param cookingMethod
 	 * @return List<Recipe> or null if no recipes are found.
 	 */
 	@GetMapping("/recipes")
 	public List<Recipe> getRecipes(@RequestParam("queryString") @NotBlank String queryString,
+			@RequestParam(required = false) @Valid @CategoryConstraint Category category,
+			@RequestParam(required = false) @Valid @CookingMethodConstraint CookingMethod cookingMethod,
 			HttpServletResponse httpResponse) {
-		List<Recipe> response = recipeRepository.searchByTitleAndDescription(queryString);
+		List<Recipe> response = recipeRepository.search(queryString, category, cookingMethod);
 		if (response.isEmpty()) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			RM_LOGGER.debug("No Recipes Found.");

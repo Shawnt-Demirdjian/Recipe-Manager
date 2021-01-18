@@ -1,13 +1,11 @@
 package com.demirdjian.recipemanager.error;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
@@ -42,11 +40,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     /**
      * Defines the handler for the Failed Constraint exceptions.
      * 
-     * @param response
-     * @throws IOException
+     * @param ex
+     * @param request
+     * @return ResponseEntity
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public void constraintViolationException(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
+    public ResponseEntity<Object> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        // Get all errors
+        List<String> errors = ex.getConstraintViolations().stream().map(x -> x.getMessage())
+                .collect(Collectors.toList());
+
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
