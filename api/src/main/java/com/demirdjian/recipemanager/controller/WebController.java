@@ -81,9 +81,10 @@ public class WebController {
 	 *
 	 * @param newRecipe
 	 * @param httpResponse
+	 * @return Recipe
 	 */
 	@PostMapping("/recipes")
-	public void createRecipe(@Valid @RequestBody CreateRecipeBody newRecipe, HttpServletResponse httpResponse) {
+	public Recipe createRecipe(@Valid @RequestBody CreateRecipeBody newRecipe, HttpServletResponse httpResponse) {
 		Recipe recipe = new Recipe();
 		recipe.setDescription(newRecipe.getDescription());
 		recipe.setTitle(newRecipe.getTitle());
@@ -93,6 +94,7 @@ public class WebController {
 		recipe.setCookingMethod(newRecipe.getCookingMethod());
 		recipeRepository.save(recipe);
 		RM_LOGGER.debug("Recipe Created: \n{}", recipe);
+		return recipe;
 	}
 
 	/**
@@ -101,16 +103,17 @@ public class WebController {
 	 * @param id
 	 * @param newRecipeParts
 	 * @param httpResponse
+	 * @return Recipe
 	 */
 	@PatchMapping("/recipes/{id}")
-	public void updateRecipe(@PathVariable("id") @NotBlank String id,
+	public Recipe updateRecipe(@PathVariable("id") @NotBlank String id,
 			@Valid @RequestBody UpdateRecipeBody newRecipeParts, HttpServletResponse httpResponse) {
 		// Check if recipe with id exists
 		Optional<Recipe> existingRecipe = recipeRepository.findById(id);
 		if (!existingRecipe.isPresent()) {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			RM_LOGGER.debug("No Recipe Found.");
-			return;
+			return null;
 		}
 
 		// Update newRecipe with included parts from newRecipeParts
@@ -137,6 +140,7 @@ public class WebController {
 		// Update the recipe
 		recipeRepository.save(newRecipe);
 		RM_LOGGER.debug("Recipe Updated: \n{}", newRecipe);
+		return newRecipe;
 	}
 
 	/**
@@ -144,14 +148,18 @@ public class WebController {
 	 *
 	 * @param id
 	 * @param httpResponse
+	 * @return Recipe
 	 */
 	@DeleteMapping("/recipes/{id}")
-	public void deleteRecipe(@PathVariable("id") @NotBlank String id, HttpServletResponse httpResponse) {
-		if (recipeRepository.existsById(id)) {
+	public Recipe deleteRecipe(@PathVariable("id") @NotBlank String id, HttpServletResponse httpResponse) {
+		Optional<Recipe> recipe = recipeRepository.findById(id);
+		if (recipe.isPresent()) {
 			recipeRepository.deleteById(id);
-			RM_LOGGER.debug("Recipe Deleted with ID: {}", id);
+			RM_LOGGER.debug("Recipe Deleted: \n{}", recipe.get());
+			return recipe.get();
 		} else {
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return null;
 		}
 	}
 }
