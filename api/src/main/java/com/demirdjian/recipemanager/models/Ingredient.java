@@ -55,9 +55,9 @@ public class Ingredient {
 	 */
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
-		returnStr.append("Ingredient Name:\t" + this.name + "\n");
-		returnStr.append("Quantity:\t" + this.quantity + "\n");
-		returnStr.append("Unit:\t" + this.unit + "\n");
+		returnStr.append("{Ingredient Name:" + this.name + ",");
+		returnStr.append("Quantity:" + this.quantity + ",");
+		returnStr.append("Unit:" + this.unit + "}");
 
 		return returnStr.toString();
 	}
