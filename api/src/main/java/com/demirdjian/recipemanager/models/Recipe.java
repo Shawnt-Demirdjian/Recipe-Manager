@@ -20,6 +20,8 @@ public class Recipe {
 	private Ingredient[] ingredients;
 
 	private String[] steps;
+	private Category category;
+	private CookingMethod cookingMethod;
 
 	/**
 	 * Empty Constructor.
@@ -35,13 +37,18 @@ public class Recipe {
 	 * @param ingredients
 	 * @param description
 	 * @param steps
+	 * @param category
+	 * @param cookingMethod
 	 */
-	public Recipe(String id, String title, Ingredient[] ingredients, String description, String[] steps) {
+	public Recipe(String id, String title, Ingredient[] ingredients, String description, String[] steps,
+			Category category, CookingMethod cookingMethod) {
 		this.id = id;
 		this.title = title;
 		this.ingredients = ingredients;
 		this.description = description;
 		this.steps = steps;
+		this.category = category;
+		this.cookingMethod = cookingMethod;
 	}
 
 	public String getTitle() {
@@ -84,6 +91,22 @@ public class Recipe {
 		this.id = id;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public CookingMethod getCookingMethod() {
+		return cookingMethod;
+	}
+
+	public void setCookingMethod(CookingMethod cookingMethod) {
+		this.cookingMethod = cookingMethod;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -91,11 +114,13 @@ public class Recipe {
 	 */
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
+		returnStr.append("ID:\t\t" + this.id + "\n");
 		returnStr.append("Title:\t\t" + this.title + "\n");
 		returnStr.append("Description:\t" + this.description + "\n");
 		returnStr.append("Ingredients:\t" + Arrays.toString(this.ingredients) + "\n");
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
-		returnStr.append("ID:\t\t" + this.id + "\n");
+		returnStr.append("Category:\t" + this.category + "\n");
+		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
 
 		return returnStr.toString();
 	}

@@ -10,6 +10,8 @@ public class UpdateRecipeBody {
 	private Ingredient[] ingredients;
 	private String description;
 	private String[] steps;
+	private Category category;
+	private CookingMethod cookingMethod;
 
 	public String getTitle() {
 		return title;
@@ -51,6 +53,22 @@ public class UpdateRecipeBody {
 		this.id = id;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public CookingMethod getCookingMethod() {
+		return cookingMethod;
+	}
+
+	public void setCookingMethod(CookingMethod cookingMethod) {
+		this.cookingMethod = cookingMethod;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -62,6 +80,8 @@ public class UpdateRecipeBody {
 		returnStr.append("Description:\t" + this.description + "\n");
 		returnStr.append("Ingredients:\t" + Arrays.toString(this.ingredients) + "\n");
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
+		returnStr.append("Category:\t" + this.category + "\n");
+		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
 
 		return returnStr.toString();
 	}

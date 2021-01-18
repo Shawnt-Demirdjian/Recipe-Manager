@@ -89,6 +89,8 @@ public class WebController {
 		recipe.setTitle(newRecipe.getTitle());
 		recipe.setIngredients(newRecipe.getIngredients());
 		recipe.setSteps(newRecipe.getSteps());
+		recipe.setCategory(newRecipe.getCategory());
+		recipe.setCookingMethod(newRecipe.getCookingMethod());
 		recipeRepository.save(recipe);
 		RM_LOGGER.debug("Recipe Created: \n{}", recipe);
 	}
@@ -124,6 +126,12 @@ public class WebController {
 		}
 		if (newRecipeParts.getSteps() != null && newRecipeParts.getSteps().length != 0) {
 			newRecipe.setSteps(newRecipeParts.getSteps());
+		}
+		if (newRecipeParts.getCategory() != null) {
+			newRecipe.setCategory(newRecipeParts.getCategory());
+		}
+		if (newRecipeParts.getCookingMethod() != null) {
+			newRecipe.setCookingMethod(newRecipeParts.getCookingMethod());
 		}
 
 		// Update the recipe

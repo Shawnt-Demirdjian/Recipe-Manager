@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class CreateRecipeBody {
 	@NotBlank(message = "Title may not be empty.")
@@ -17,6 +18,12 @@ public class CreateRecipeBody {
 
 	@NotEmpty(message = "Steps may not be empty.")
 	private String[] steps;
+
+	@NotNull(message = "Category may not be empty.")
+	private Category category;
+
+	@NotNull(message = "Cooking Method may not be empty.")
+	private CookingMethod cookingMethod;
 
 	public String getTitle() {
 		return title;
@@ -50,6 +57,22 @@ public class CreateRecipeBody {
 		this.steps = steps;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public CookingMethod getCookingMethod() {
+		return cookingMethod;
+	}
+
+	public void setCookingMethod(CookingMethod cookingMethod) {
+		this.cookingMethod = cookingMethod;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -61,6 +84,8 @@ public class CreateRecipeBody {
 		returnStr.append("Description:\t" + this.description + "\n");
 		returnStr.append("Ingredients:\t" + Arrays.toString(this.ingredients) + "\n");
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
+		returnStr.append("Category:\t" + this.category + "\n");
+		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
 
 		return returnStr.toString();
 	}
