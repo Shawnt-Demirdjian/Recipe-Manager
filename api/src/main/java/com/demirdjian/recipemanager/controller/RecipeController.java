@@ -33,11 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/api")
-public class WebController {
+public class RecipeController {
 
 	@Autowired
 	private RecipeRepository recipeRepository;
-	private static final Logger RM_LOGGER = LoggerFactory.getLogger(WebController.class);
+	private static final Logger RM_LOGGER = LoggerFactory.getLogger(RecipeController.class);
 
 	/**
 	 * Returns the recipe associated with the provided ID.

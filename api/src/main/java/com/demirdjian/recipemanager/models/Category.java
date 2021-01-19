@@ -1,5 +1,9 @@
 package com.demirdjian.recipemanager.models;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum Category {
@@ -20,5 +24,19 @@ public enum Category {
 			return Category.INVALID;
 		}
 		return response;
+	}
+
+	/**
+	 * Returns array of VALID Categories.
+	 * 
+	 * @return Category[]
+	 * 
+	 */
+	public static Category[] validValues() {
+		// Remove INVALID from Category.values()
+		List<Category> response = new ArrayList<>();
+		Collections.addAll(response, Category.values());
+		response.removeIf(x -> (x == Category.INVALID));
+		return response.toArray(new Category[0]);
 	}
 }
