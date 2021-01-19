@@ -17,7 +17,8 @@ public class UpdateRecipeValidator implements ConstraintValidator<UpdateRecipeCo
 		// updateRecipe is Invalid if all properties are null
 		return (updateRecipe.getCategory() != null || updateRecipe.getCookingMethod() != null
 				|| updateRecipe.getDescription() != null || updateRecipe.getIngredients() != null
-				|| updateRecipe.getSteps() != null || updateRecipe.getTitle() != null);
+				|| updateRecipe.getSteps() != null || updateRecipe.getTitle() != null
+				|| updateRecipe.getAuthor() != null);
 	}
 
 }

@@ -100,6 +100,7 @@ public class RecipeController {
 		recipe.setSteps(newRecipe.getSteps());
 		recipe.setCategory(newRecipe.getCategory());
 		recipe.setCookingMethod(newRecipe.getCookingMethod());
+		recipe.setAuthor(newRecipe.getAuthor());
 		recipeRepository.save(recipe);
 		RM_LOGGER.debug("Recipe Created: \n{}", recipe);
 		return recipe;
@@ -143,6 +144,9 @@ public class RecipeController {
 		}
 		if (newRecipeParts.getCookingMethod() != null) {
 			newRecipe.setCookingMethod(newRecipeParts.getCookingMethod());
+		}
+		if (newRecipeParts.getAuthor() != null) {
+			newRecipe.setAuthor(newRecipeParts.getAuthor());
 		}
 
 		// Update the recipe

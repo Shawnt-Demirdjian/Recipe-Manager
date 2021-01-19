@@ -30,6 +30,9 @@ public class CreateRecipeBody {
 	@CookingMethodConstraint
 	private CookingMethod cookingMethod;
 
+	@NotBlank(message = "Author may not be empty.")
+	private String author;
+
 	public String getTitle() {
 		return title;
 	}
@@ -78,6 +81,14 @@ public class CreateRecipeBody {
 		this.cookingMethod = cookingMethod;
 	}
 
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -86,6 +97,7 @@ public class CreateRecipeBody {
 	public String toString() {
 		StringBuilder returnStr = new StringBuilder();
 		returnStr.append("Title:\t\t" + this.title + "\n");
+		returnStr.append("Author:\t\t" + this.author + "\n");
 		returnStr.append("Description:\t" + this.description + "\n");
 		returnStr.append("Ingredients:\t" + Arrays.toString(this.ingredients) + "\n");
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
