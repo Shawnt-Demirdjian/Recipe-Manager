@@ -14,13 +14,12 @@ public class UpdateRecipeBody {
 	private Ingredient[] ingredients;
 	private String description;
 	private String[] steps;
+	private String author;
 
 	@CategoryConstraint
 	private Category category;
 	@CookingMethodConstraint
 	private CookingMethod cookingMethod;
-
-	private String author;
 
 	public String getTitle() {
 		return title;

@@ -17,11 +17,11 @@ public @interface UpdateRecipeConstraint {
 
 	/**
 	 * Returns the error message. Defaults to "Must include at least one property to
-	 * upgrade.".
+	 * update.".
 	 * 
 	 * @return String
 	 */
-	String message() default "Must include at least one property to upgrade.";
+	String message() default "Must include at least one property to update.";
 
 	/**
 	 * Defines targeted groups.

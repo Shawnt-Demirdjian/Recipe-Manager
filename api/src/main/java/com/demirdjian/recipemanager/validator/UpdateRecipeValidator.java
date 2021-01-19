@@ -13,12 +13,43 @@ public class UpdateRecipeValidator implements ConstraintValidator<UpdateRecipeCo
 	}
 
 	@Override
-	public boolean isValid(UpdateRecipeBody updateRecipe, ConstraintValidatorContext cxt) {
-		// updateRecipe is Invalid if all properties are null
-		return (updateRecipe.getCategory() != null || updateRecipe.getCookingMethod() != null
-				|| updateRecipe.getDescription() != null || updateRecipe.getIngredients() != null
-				|| updateRecipe.getSteps() != null || updateRecipe.getTitle() != null
-				|| updateRecipe.getAuthor() != null);
+	public boolean isValid(UpdateRecipeBody updateRecipe, ConstraintValidatorContext context) {
+		// updateRecipe is invalid if all properties are null
+		// or a provided property is Empty
+		// Category and Cooking Method are validated through their custom constraints
+
+		if (updateRecipe.getDescription() == null && updateRecipe.getIngredients() == null
+				&& updateRecipe.getSteps() == null && updateRecipe.getTitle() == null
+				&& updateRecipe.getAuthor() == null) {
+			return false;
+		}
+
+		boolean response = true;
+		context.disableDefaultConstraintViolation();
+
+		if (updateRecipe.getDescription() != null && updateRecipe.getDescription().isBlank()) {
+			context.buildConstraintViolationWithTemplate("Description may not be empty.").addConstraintViolation();
+			response = false;
+		}
+		if (updateRecipe.getIngredients() != null && updateRecipe.getIngredients().length == 0) {
+			context.buildConstraintViolationWithTemplate("Ingredients may not be empty.").addConstraintViolation();
+			response = false;
+		}
+		if (updateRecipe.getSteps() != null && updateRecipe.getSteps().length == 0) {
+			context.buildConstraintViolationWithTemplate("Steps may not be empty.").addConstraintViolation();
+			response = false;
+		}
+		if (updateRecipe.getTitle() != null && updateRecipe.getTitle().isBlank()) {
+			context.buildConstraintViolationWithTemplate("Title may not be empty.").addConstraintViolation();
+			response = false;
+		}
+		if (updateRecipe.getAuthor() != null && updateRecipe.getAuthor().isBlank()) {
+			context.buildConstraintViolationWithTemplate("Author may not be empty.").addConstraintViolation();
+			response = false;
+		}
+
+		return response;
+
 	}
 
 }
