@@ -23,6 +23,7 @@ public class Recipe {
 	private Category category;
 	private CookingMethod cookingMethod;
 	private String author;
+	private Integer servings;
 
 	/**
 	 * Empty Constructor.
@@ -40,9 +41,11 @@ public class Recipe {
 	 * @param steps
 	 * @param category
 	 * @param cookingMethod
+	 * @param author
+	 * @param servings
 	 */
 	public Recipe(String id, String title, Ingredient[] ingredients, String description, String[] steps,
-			Category category, CookingMethod cookingMethod) {
+			Category category, CookingMethod cookingMethod, String author, Integer servings) {
 		this.id = id;
 		this.title = title;
 		this.ingredients = ingredients;
@@ -50,6 +53,8 @@ public class Recipe {
 		this.steps = steps;
 		this.category = category;
 		this.cookingMethod = cookingMethod;
+		this.author = author;
+		this.servings = servings;
 	}
 
 	public String getTitle() {
@@ -116,6 +121,14 @@ public class Recipe {
 		this.author = author;
 	}
 
+	public Integer getServings() {
+		return servings;
+	}
+
+	public void setServings(Integer servings) {
+		this.servings = servings;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -131,6 +144,7 @@ public class Recipe {
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
 		returnStr.append("Category:\t" + this.category + "\n");
 		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
+		returnStr.append("Servings:\t" + this.servings + "\n");
 
 		return returnStr.toString();
 	}

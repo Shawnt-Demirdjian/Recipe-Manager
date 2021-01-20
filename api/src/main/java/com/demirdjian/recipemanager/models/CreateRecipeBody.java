@@ -2,6 +2,7 @@ package com.demirdjian.recipemanager.models;
 
 import java.util.Arrays;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -32,6 +33,10 @@ public class CreateRecipeBody {
 
 	@NotBlank(message = "Author may not be empty.")
 	private String author;
+
+	@NotNull(message = "Servings may not be empty.")
+	@Min(value = 1, message = "Servings may not be less than 1.")
+	private Integer servings;
 
 	public String getTitle() {
 		return title;
@@ -89,6 +94,14 @@ public class CreateRecipeBody {
 		this.author = author;
 	}
 
+	public Integer getServings() {
+		return servings;
+	}
+
+	public void setServings(Integer servings) {
+		this.servings = servings;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -103,6 +116,7 @@ public class CreateRecipeBody {
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
 		returnStr.append("Category:\t" + this.category + "\n");
 		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
+		returnStr.append("Servings:\t" + this.servings + "\n");
 
 		return returnStr.toString();
 	}

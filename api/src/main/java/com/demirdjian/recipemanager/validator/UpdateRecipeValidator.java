@@ -20,7 +20,7 @@ public class UpdateRecipeValidator implements ConstraintValidator<UpdateRecipeCo
 
 		if (updateRecipe.getDescription() == null && updateRecipe.getIngredients() == null
 				&& updateRecipe.getSteps() == null && updateRecipe.getTitle() == null
-				&& updateRecipe.getAuthor() == null) {
+				&& updateRecipe.getAuthor() == null && updateRecipe.getServings() == null) {
 			return false;
 		}
 
@@ -45,6 +45,11 @@ public class UpdateRecipeValidator implements ConstraintValidator<UpdateRecipeCo
 		}
 		if (updateRecipe.getAuthor() != null && updateRecipe.getAuthor().isBlank()) {
 			context.buildConstraintViolationWithTemplate("Author may not be empty.").addConstraintViolation();
+			response = false;
+		}
+		if (updateRecipe.getServings() != null && updateRecipe.getServings() < 1) {
+			context.buildConstraintViolationWithTemplate("Servings may not be empty or less than 1.")
+					.addConstraintViolation();
 			response = false;
 		}
 

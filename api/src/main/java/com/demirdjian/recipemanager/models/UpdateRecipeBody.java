@@ -15,6 +15,7 @@ public class UpdateRecipeBody {
 	private String description;
 	private String[] steps;
 	private String author;
+	private Integer servings;
 
 	@CategoryConstraint
 	private Category category;
@@ -85,6 +86,14 @@ public class UpdateRecipeBody {
 		this.author = author;
 	}
 
+	public Integer getServings() {
+		return servings;
+	}
+
+	public void setServings(Integer servings) {
+		this.servings = servings;
+	}
+
 	/**
 	 * Custom toString for debug printing.
 	 * 
@@ -99,6 +108,7 @@ public class UpdateRecipeBody {
 		returnStr.append("Steps:\t\t" + Arrays.toString(this.steps) + "\n");
 		returnStr.append("Category:\t" + this.category + "\n");
 		returnStr.append("Cooking Method:\t" + this.cookingMethod + "\n");
+		returnStr.append("Servings:\t" + this.servings + "\n");
 
 		return returnStr.toString();
 	}
