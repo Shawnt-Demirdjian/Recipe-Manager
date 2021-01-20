@@ -9,7 +9,7 @@ import com.demirdjian.recipemanager.validator.UpdateRecipeConstraint;
 @UpdateRecipeConstraint
 public class UpdateRecipeBody {
 
-	private int id;
+	private String id;
 	private String title;
 	private Ingredient[] ingredients;
 	private String description;
@@ -54,11 +54,11 @@ public class UpdateRecipeBody {
 		this.steps = steps;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
