@@ -1,8 +1,9 @@
 FROM nginx
 
 ## RECIPE MANAGER NGINX WEB SERVER
-COPY ./client /usr/share/nginx/html
-COPY ./recipe-manager-site.conf /etc/nginx/conf.d/default.conf
+RUN mkdir /app
+COPY ./recipe-manager-client/dist /app
+COPY ./recipe-manager-site.conf /etc/nginx/nginx.conf
 
 # Run NGINX
 CMD ["nginx", "-g", "daemon off;"]
