@@ -1,4 +1,4 @@
-FROM adoptopenjdk:14-jre
+FROM adoptopenjdk:15-jre
 
 ## RECIPE MANAGER SPRINGBOOT APP
 WORKDIR /docker_workdir
