@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum CookingMethod {
-	STOVE, OVEN, BBQ, FRYER, NONE, INVALID;
+	STOVE, OVEN, BARBECUE, FRYER, WOK, GRIDDLE, NONE, INVALID;
 
 	/**
 	 * Convert String to CookingMethod.

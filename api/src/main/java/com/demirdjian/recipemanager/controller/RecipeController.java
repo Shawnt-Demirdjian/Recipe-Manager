@@ -70,7 +70,7 @@ public class RecipeController {
 	 * @return List<Recipe> or null if no recipes are found.
 	 */
 	@GetMapping("/recipes")
-	public List<Recipe> getRecipes(@RequestParam("queryString") @NotBlank String queryString,
+	public List<Recipe> getRecipes(@RequestParam("queryString") @NotBlank(message = "Query String may not be blank.") String queryString,
 			@RequestParam(required = false) @Valid @CategoryConstraint Category category,
 			@RequestParam(required = false) @Valid @CookingMethodConstraint CookingMethod cookingMethod,
 			HttpServletResponse httpResponse) {

@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum Category {
-	SIDE, ENTREE, DESSERT, APPETIZER, INVALID;
+	CARB_SIDE, VEGGIE_SIDE, ENTREE, DESSERT, APPETIZER, INVALID;
 
 	/**
 	 * Convert String to Category.
