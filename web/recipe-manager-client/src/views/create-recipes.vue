@@ -7,11 +7,11 @@ h1 Recipes!
 
 <script>
 // @ is an alias to /src
-import RecipeCard from '@/components/RecipeCard.vue';
+import RecipeCard from '@/components/recipe-card.vue';
 import axios from 'axios';
 
 export default {
-  name: 'Recipes',
+  name: 'Create Recipe',
   components: {
     RecipeCard,
   },

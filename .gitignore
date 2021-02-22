@@ -8,6 +8,7 @@ target/
 .vscode/
 .project
 .settings/
+vetur.config.js
 
 # non-default Application properties
 **/application-*.properties
