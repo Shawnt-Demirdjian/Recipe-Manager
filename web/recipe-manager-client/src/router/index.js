@@ -17,6 +17,12 @@ const routes = [
     name: 'Search Recipes',
     component: () => import('../views/search-recipes.vue'),
   },
+  {
+    path: '/recipes/:recipeId',
+    name: 'Recipe',
+    component: () => import('../views/recipe.vue'),
+    props: true,
+  },
 ];
 
 const router = createRouter({

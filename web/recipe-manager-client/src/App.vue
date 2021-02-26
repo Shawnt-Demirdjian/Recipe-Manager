@@ -12,7 +12,7 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
     )
       span.navbar-toggler-icon
     #navbarSupportedContent.collapse.navbar-collapse
-      ul.navbar-nav.me-auto.mb-2.mb-lg-0
+      ul.navbar-nav.fw-bold.me-auto.mb-2.mb-lg-0
         li.nav-item
           router-link.nav-link(to="/") Home
         li.nav-item
@@ -30,6 +30,6 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-primary
 }
 
 .nav-item a.router-link-exact-active {
-  color: #42b983 !important;
+  color: goldenrod !important;
 }
 </style>

@@ -26,7 +26,7 @@
     .invalid-feedback.d-block.text-center {{ errorMessage }}
 .container-fluid.d-flex.align-content-center.flex-wrap.justify-content-center
   template(v-for="recipe in recipeData", :key="recipe")
-    RecipeCard(:data="recipe")
+    RecipeCard(:recipeData="recipe")
 </template>
 
 <script>
