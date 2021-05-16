@@ -9,8 +9,8 @@ const routes = [
   },
   {
     path: '/create-recipe',
-    name: 'Create Recipes',
-    component: () => import('../views/create-recipes.vue'),
+    name: 'Create Recipe',
+    component: () => import('../views/create-recipe.vue'),
   },
   {
     path: '/search-recipes',
@@ -19,8 +19,14 @@ const routes = [
   },
   {
     path: '/recipes/:recipeId',
-    name: 'Recipe',
-    component: () => import('../views/recipe.vue'),
+    name: 'View Recipe',
+    component: () => import('../views/view-recipe.vue'),
+    props: true,
+  },
+  {
+    path: '/edit-recipe/:recipeId',
+    name: 'Edit Recipe',
+    component: () => import('../views/edit-recipe.vue'),
     props: true,
   },
 ];

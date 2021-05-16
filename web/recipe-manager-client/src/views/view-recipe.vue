@@ -8,6 +8,9 @@
           h3 {{ recipeData.category }} | {{ recipeData.cookingMethod }}
           h5 By: {{ recipeData.author }}
           p.mt-3 {{ recipeData.description }}
+          router-link.btn.btn-info(
+            :to="{ name: 'Edit Recipe', params: { recipeId: recipeData.id } }"
+          ) Edit Recipe
         .ingredient-section.my-5
           h2.text-center Ingredients
           h6.text-center Serves: {{ recipeData.servings }}
@@ -36,7 +39,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'Recipe',
+  name: 'View Recipe',
   data() {
     return {
       recipeData: null,
