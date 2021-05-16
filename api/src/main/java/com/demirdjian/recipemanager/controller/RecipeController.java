@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,6 +158,39 @@ public class RecipeController {
 		recipeRepository.save(newRecipe);
 		RM_LOGGER.debug("Recipe Updated: \n{}", newRecipe);
 		return newRecipe;
+	}
+
+	/**
+	 * Replaces the recipe of the provide ID with the provided recipe.
+	 * 
+	 * @param id
+	 * @param newRecipe
+	 * @param httpResponse
+	 * @return Recipe
+	 */
+	@PutMapping("/recipes/{id}")
+	public Recipe replaceRecipe(@PathVariable("id") @NotBlank String id, @Valid @RequestBody CreateRecipeBody newRecipe, HttpServletResponse httpResponse) {
+		// Check if recipe with id exists
+		Optional<Recipe> existingRecipe = recipeRepository.findById(id);
+		if (!existingRecipe.isPresent()) {
+			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			RM_LOGGER.debug("No Recipe Found.");
+			return null;
+		}
+
+		Recipe recipe = new Recipe();
+		recipe.setId(id);
+		recipe.setDescription(newRecipe.getDescription());
+		recipe.setTitle(newRecipe.getTitle());
+		recipe.setIngredients(newRecipe.getIngredients());
+		recipe.setSteps(newRecipe.getSteps());
+		recipe.setCategory(newRecipe.getCategory());
+		recipe.setCookingMethod(newRecipe.getCookingMethod());
+		recipe.setAuthor(newRecipe.getAuthor());
+		recipe.setServings(newRecipe.getServings());
+		recipeRepository.save(recipe);
+		RM_LOGGER.debug("Recipe Replaced: \n{}", recipe);
+		return recipe;
 	}
 
 	/**
